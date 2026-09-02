@@ -23,8 +23,9 @@ const Restaurant = () => {
           },
         }
       );
-
+      
       setRestaurant(data.restaurant || null);
+     // console.log("RESTAURANT API:", data.restaurant.id);
 
       if (data.token) {
         localStorage.setItem("token", data.token);
@@ -45,6 +46,7 @@ const Restaurant = () => {
 
   const fetchMenuItems = async (restaurantId) => {
     try {
+      console.log("Fetching menu items for restaurant ID:", restaurantId);
       const { data } = await axios.get(
         `${restaurantService}/api/item/all/${restaurantId}`,
         {
@@ -53,6 +55,7 @@ const Restaurant = () => {
           },
         }
       );
+          console.log("MENU ITEMS API:", data);
 
       setMenuItems(data);
     } catch (error) {
@@ -61,8 +64,8 @@ const Restaurant = () => {
   };
 
   useEffect(() => {
-    if (restaurant?._id) {
-      fetchMenuItems(restaurant._id);
+    if (restaurant?.id) {
+      fetchMenuItems(restaurant.id);
     }
   }, [restaurant]);
 
@@ -78,6 +81,8 @@ const Restaurant = () => {
     return <AddRestaurant fetchMyRestaurant={fetchMyRestaurant} />;
   }
 
+  console.log("Menu DATA:", menuItems);
+
   return (
     <div className="min-h-screen bg-gray-50 px-4 py-6 space-y-6">
       <RestaurantProfile
@@ -86,7 +91,7 @@ const Restaurant = () => {
         isSeller={true}
       />
 
-      <RestaurantOrders restaurantId={restaurant._id} />
+      <RestaurantOrders restaurantId={restaurant.id} />
 
       <div className="rounded-xl bg-white shadow-sm">
         <div className="flex border-b">
@@ -113,19 +118,19 @@ const Restaurant = () => {
           {tab === "menu" && (
             <MenuItems
               items={menuItems}
-              onItemDeleted={() => fetchMenuItems(restaurant._id)}
+              onItemDeleted={() => fetchMenuItems(restaurant.id)}
               isSeller={true}
             />
           )}
 
           {tab === "add-item" && (
             <AddMenuItem
-              onItemAdded={() => fetchMenuItems(restaurant._id)}
+              onItemAdded={() => fetchMenuItems(restaurant.id)}
             />
           )}
 
           {tab === "sales" && (
-            <RestaurantSales restaurantId={restaurant._id} />
+            <RestaurantSales restaurantId={restaurant.id} />
           )}
         </div>
       </div>

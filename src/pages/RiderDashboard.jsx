@@ -117,6 +117,70 @@ const RiderDashboard = () => {
     fetchCurrentOrder();
   }, []);
 
+
+  useEffect(() => {
+  if (!socket || !currentOrder?._id) return;
+
+  if (currentOrder.status !== "picked_up") return;
+
+  socket.emit("join:order", {
+    orderId: currentOrder._id,
+  });
+
+  console.log("🚴 Rider joined order room:", currentOrder._id);
+
+  return () => {
+    socket.emit("leave:order", {
+      orderId: currentOrder._id,
+    });
+  };
+}, [socket, currentOrder]);
+
+
+
+useEffect(() => {
+  if (!socket || !currentOrder?._id) return;
+
+  if (currentOrder.status !== "picked_up") return;
+
+  if (!navigator.geolocation) {
+    console.log("❌ Geolocation not supported");
+    return;
+  }
+
+  const watchId = navigator.geolocation.watchPosition(
+    (position) => {
+      const { latitude, longitude } = position.coords;
+
+      console.log(
+        "📍 Sending rider location:",
+        latitude,
+        longitude
+      );
+
+      socket.emit("rider:location", {
+        orderId: currentOrder._id,
+        latitude,
+        longitude,
+      });
+    },
+    (error) => {
+      console.log("❌ GPS error:", error);
+    },
+    {
+      enableHighAccuracy: true,
+      maximumAge: 3000,
+      timeout: 10000,
+    }
+  );
+
+  return () => {
+    navigator.geolocation.clearWatch(watchId);
+  };
+}, [socket, currentOrder]);
+
+  
+
   const toggleAvailiblity = async () => {
     if (!navigator.geolocation) {
       toast.error("Location Access Required");
@@ -130,7 +194,7 @@ const RiderDashboard = () => {
         await axios.patch(
           `${riderService}/api/rider/toggle`,
           {
-            isAvailble: !profile?.isAvailble,
+            isAvailble: !profile?.availble,
             latitude: pos.coords.latitude,
             longitude: pos.coords.longitude,
           },
@@ -142,7 +206,7 @@ const RiderDashboard = () => {
         );
 
         toast.success(
-          profile?.isAvailble ? "You are offline" : "You are online"
+          profile?.available ? "You are offline" : "You are online"
         );
 
         fetchProfile();
@@ -153,6 +217,8 @@ const RiderDashboard = () => {
       }
     });
   };
+
+  
 
   const [phoneNumber, setPhoneNumber] = useState("");
   const [aadharNumber, setaadharNumber] = useState("");
@@ -269,7 +335,9 @@ const RiderDashboard = () => {
         </div>
       </div>
     );
+    
   return (
+   
     <div className="space-y-4">
       <div className="mx-auto max-w-md px-4 py-4">
         <div className="rounded-xl bg-white p-4 shadow space-y-3">
@@ -285,11 +353,11 @@ const RiderDashboard = () => {
 
           <div className="flex justify-center gap-2">
             <span className="px-2 py-1 text-xs rounded-full bg-green-100 text-green-600">
-              {profile.isVerified ? "Verified" : "Pending"}
+              {profile.verified ? "Verified" : "Pending"}
             </span>
 
             <span className="px-2 py-1 text-xs rounded-full bg-green-100 text-green-600">
-              {profile.isAvailble ? "Online" : "Offline"}
+              {profile.availble  ? "Online" : "Offline"}
             </span>
           </div>
 
@@ -300,21 +368,21 @@ const RiderDashboard = () => {
             </p>
           </div>
 
-          {profile.isVerified && !currentOrder && (
+          {profile.verified && !currentOrder && (
             <button
               onClick={toggleAvailiblity}
               disabled={toggling}
               className={`w-full py-2 rounded-lg text-white font-semibold ${
                 toggling
                   ? "bg-gray-400"
-                  : profile.isAvailble
+                  : profile.availble
                   ? "bg-gray-600"
                   : "bg-[#e23744]"
               }`}
             >
               {toggling
                 ? "Updating..."
-                : profile.isAvailble
+                : profile.availble
                 ? "Go Offline"
                 : "Go Online"}
             </button>
@@ -345,7 +413,7 @@ const RiderDashboard = () => {
         </div>
       )}
 
-      {profile.isAvailble && incomingOrders.length > 0 && (
+      {profile.availble && incomingOrders.length > 0 && (
         <div className="mx-auto max-w-md px-4 space-y-3">
           <h3 className=" font-semibold text-gray-700">Incoming Orders</h3>
           {incomingOrders.map((id) => (

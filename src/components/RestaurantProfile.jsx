@@ -10,7 +10,7 @@ const RestaurantProfile = ({ restaurant, isSeller, onUpdate }) => {
   const [editMode, setEditMode] = useState(false);
   const [name, setName] = useState(restaurant.name);
   const [description, setDescription] = useState(restaurant.description);
-  const [isOpen, setIsOpen] = useState(restaurant.isOpen);
+  const [isOpen, setIsOpen] = useState(restaurant.open);
   const [loading, setLoading] = useState(false);
 
   const { setIsAuth, setUser } = useAppData();
@@ -28,7 +28,7 @@ const RestaurantProfile = ({ restaurant, isSeller, onUpdate }) => {
       );
 
       toast.success(data.message);
-      setIsOpen(data.restaurant.isOpen);
+      setIsOpen(data.restaurant.open);
     } catch (error) {
       console.log(error);
       toast.error(error.response?.data?.message || "Failed to update status");

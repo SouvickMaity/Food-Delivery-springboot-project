@@ -12,6 +12,7 @@ export const SocketProvider = ({ children }) => {
 
   const socketRef = useRef(null);
 
+
   useEffect(() => {
     if (!isAuth) {
       socketRef.current?.disconnect();
@@ -21,12 +22,17 @@ export const SocketProvider = ({ children }) => {
 
     if (socketRef.current) return;
 
+    // const socket = io(realtimeService, {
+    //   auth: {
+    //     token: localStorage.getItem("token"),
+    //   },
+    // });
+
     const socket = io(realtimeService, {
-      auth: {
-        token: localStorage.getItem("token"),
-      },
-      transports: ["websocket"],
-    });
+    query: {
+        token: localStorage.getItem("token")
+    }
+});
 
     socketRef.current = socket;
 

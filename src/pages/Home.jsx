@@ -87,7 +87,7 @@ const Home = () => {
               resLat,
               resLng
             );
-
+            console.log("Distance for restaurant", res);
             return (
               <RestaurantCard
                 key={res._id}

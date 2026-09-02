@@ -31,6 +31,8 @@ const Cart = () => {
 
   const increaseQty = async (itemId) => {
     try {
+      console.log("ITEM ID:", itemId);
+      console.log("TYPE:", typeof itemId);
       setLoadingItemId(itemId);
 
       await axios.put(
@@ -53,6 +55,8 @@ const Cart = () => {
 
   const decreaseQty = async (itemId) => {
     try {
+      
+
       setLoadingItemId(itemId);
 
       await axios.put(
@@ -113,11 +117,11 @@ const Cart = () => {
       <div className="space-y-4">
         {cart.map((cartItem) => {
           const item = cartItem.itemId;
-          const isLoading = loadingItemId === item._id;
-
+          const isLoading = loadingItemId === item.id;
+            
           return (
             <div
-              key={item._id}
+              key={item.id}
               className="flex items-center gap-4 rounded-xl bg-white p-4 shadow-sm"
             >
               <img
@@ -135,7 +139,7 @@ const Cart = () => {
                 <button
                   className="rounded-full border p-2 hover:bg-gray-100 disabled:opacity-50"
                   disabled={isLoading}
-                  onClick={() => decreaseQty(item._id)}
+                  onClick={() => decreaseQty(item.id)}
                 >
                   {isLoading ? (
                     <VscLoading size={16} className="animate-spin" />
@@ -149,7 +153,7 @@ const Cart = () => {
                 <button
                   className="rounded-full border p-2 hover:bg-gray-100 disabled:opacity-50"
                   disabled={isLoading}
-                  onClick={() => increaseQty(item._id)}
+                  onClick={() => increaseQty(item.id)}
                 >
                   {isLoading ? (
                     <VscLoading size={16} className="animate-spin" />
@@ -201,12 +205,12 @@ const Cart = () => {
 
         <button
           onClick={checkout}
-          disabled={!restaurant.isOpen}
+          disabled={!restaurant.open}
           className={`mt-3 w-full rounded-lg bg-[#E23744] py-3 text-sm font-semibold text-white hover:bg-red-800 ${
-            !restaurant.isOpen ? "cursor-not-allowed opacity-50" : ""
+            !restaurant.open ? "cursor-not-allowed opacity-50" : ""
           }`}
         >
-          {!restaurant.isOpen
+          {!restaurant.open
             ? "Restaurant is Closed"
             : "Proceed to Checkout"}
         </button>

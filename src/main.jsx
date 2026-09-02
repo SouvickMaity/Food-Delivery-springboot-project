@@ -7,13 +7,12 @@ import { AppProvider } from "./context/AppContext.jsx";
 import "leaflet/dist/leaflet.css";
 import { SocketProvider } from "./context/SocketContext.jsx";
 
-export const authService = 'https://food-delivery-auth-service-latest.onrender.com'
-export const restaurantService = 'https://food-delivery-restaurant-service-latest.onrender.com'
-export const utilsService = 'https://food-delivery-utils-service-latest.onrender.com'
-export const realtimeService = 'https://food-delivery-realtime-service-latest.onrender.com'
-export const riderService = 'https://rider-service-diml.onrender.com'
-export const adminService = 'https://food-delivery-quickbite-admin-latest.onrender.com'
-
+export const authService = 'http://localhost:5000'
+export const restaurantService = 'http://localhost:5001'
+export const utilsService = 'http://localhost:5002'
+export const realtimeService = 'http://localhost:5007'
+export const riderService = 'http://localhost:5005'
+export const adminService = 'http://localhost:5008'
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>

@@ -48,6 +48,8 @@ const RestaurantPage = () => {
     }
   };
 
+  console.log("hello");
+
   useEffect(() => {
     if (id) {
       fetchRestaurant();

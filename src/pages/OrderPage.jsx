@@ -80,6 +80,26 @@ const OrderPage = () => {
     };
   }, [socket]);
 
+  useEffect(() => {
+  if (!socket || !id) return;
+
+  if (order?.status !== "picked_up") return;
+
+  console.log("👤 Customer joining order:", id);
+
+  socket.emit("join:order", {
+    orderId: id,
+  });
+
+  return () => {
+    socket.emit("leave:order", {
+      orderId: id,
+    });
+  };
+}, [socket, id, order?.status]);
+
+
+
   if (loading) {
     return <p className="text-center text-gray-500">Loading order...</p>;
   }
@@ -92,9 +112,11 @@ const OrderPage = () => {
     );
   }
 
+  console.log("Rider Location State:", riderLocation);
+
   return (
     <div className="mx-auto max-w-3xl space-y-6 px-4 py-6">
-      <h1 className="text-xl font-bold">Order #{order._id.slice(-6)}</h1>
+      <h1 className="text-xl font-bold">Order #{(order.id || order._id || "").slice(-6)}</h1>
 
       <div className="rounded-lg bg-blue-50 p-3 text-sm font-medium">
         Status: <span className="capitalize">{order.status}</span>

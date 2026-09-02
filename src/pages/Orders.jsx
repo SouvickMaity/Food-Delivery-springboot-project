@@ -89,9 +89,9 @@ const Orders = () => {
         ) : (
           activeOrders.map((order) => (
             <OrderRow
-              key={order._id}
+              key={order.id}
               order={order}
-              onClick={() => navigate(`/order/${order._id}`)}
+              onClick={() => navigate(`/order/${order.id}`)}
             />
           ))
         )}
@@ -105,9 +105,9 @@ const Orders = () => {
         ) : (
           completedOrders.map((order) => (
             <OrderRow
-              key={order._id}
+              key={order.id}
               order={order}
-              onClick={() => navigate(`/order/${order._id}`)}
+              onClick={() => navigate(`/order/${order.id}`)}
             />
           ))
         )}
@@ -127,7 +127,7 @@ const OrderRow = ({ order, onClick }) => {
     >
       <div className="flex justify-between items-center">
         <p className="text-sm font-medium">
-          Order #{order._id.slice(-6)}
+          Order #{order.id.slice(-6)}
         </p>
         <span className="text-xs capitalize text-gray-500">
           {order.status}

@@ -48,7 +48,7 @@ const OrderCard = ({ order, onStatusUpdate }) => {
       setRetryVisible(false);
 
       await axios.put(
-        `${restaurantService}/api/order/${order._id}`,
+        `${restaurantService}/api/order/${order.id}`,
         { status },
         {
           headers: {
@@ -73,7 +73,7 @@ const OrderCard = ({ order, onStatusUpdate }) => {
     <div className="space-y-3 rounded-xl bg-white p-4 shadow-sm">
       <div className="flex items-center justify-between">
         <p className="text-sm font-medium">
-          Order #{order._id.slice(-6)}
+          Order #{order.id.slice(-6)}
         </p>
 
         <span

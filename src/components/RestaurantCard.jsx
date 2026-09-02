@@ -3,6 +3,9 @@ import { useNavigate } from "react-router-dom";
 const RestaurantCard = ({ id, image, name, distance, isOpen }) => {
   const navigate = useNavigate();
 
+  console.log("RestaurantCard ID:", id);
+
+
   return (
     <div
       className={`cursor-pointer overflow-hidden rounded-xl bg-white shadow-sm transition hover:shadow-md ${

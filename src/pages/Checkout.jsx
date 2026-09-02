@@ -201,17 +201,17 @@ const Checkout = () => {
         ) : (
           addresses.map((add) => (
             <label
-              key={add._id}
+              key={add.id}
               className={`flex gap-3 rounded-lg border p-3 cursor-pointer transition ${
-                selectedAddressId === add._id
+                selectedAddressId === add.id
                   ? "border-[#e23744] bg-red-50"
                   : "hover:bg-gray-50"
               }`}
             >
               <input
                 type="radio"
-                checked={selectedAddressId === add._id}
-                onChange={() => setselectedAddressId(add._id)}
+                checked={selectedAddressId === add.id}
+                onChange={() => setselectedAddressId(add.id)}
               />
               <div>
                 <p className="text-sm font-medium">{add.formattedAddress}</p>
